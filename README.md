@@ -22,7 +22,7 @@
 
 ## 🚀 インストール方法
 
-1.  [Easy Discord Bot Builder](https://himais0giiiin.com/beta/) を開きます。
+1.  [Easy Discord Bot Builder](https://edbplugin.github.io/easy-bdp/) を開きます。
 2.  「プラグイン」ボタンをクリックします。
 3.  「GitHubで探す」タブで `CheckStatus` を検索するか、以下のインストールURLをブラウザに貼り付けます：
     `https://edbplugin.github.io/easy-bdp/editor/index.html?install-plugin=yuta25912%2FCheckStatus%40master`
