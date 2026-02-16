@@ -25,7 +25,7 @@
 1.  [Easy Discord Bot Builder](https://himais0giiiin.com/beta/) を開きます。
 2.  「プラグイン」ボタンをクリックします。
 3.  「GitHubで探す」タブで `CheckStatus` を検索するか、以下のインストールURLをブラウザに貼り付けます：
-    `https://himais0giiiin.com/beta/?install-plugin=yuta25912/CheckStatus`
+    `https://edbplugin.github.io/easy-bdp/editor/index.html?install-plugin=yuta25912%2FCheckStatus%40master`
 
 ## 🛠️ 開発者向け
 
