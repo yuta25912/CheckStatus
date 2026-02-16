@@ -1,7 +1,7 @@
 {
     "id": "CheckStatus",
     "name": "CheckStatus",
-    "version": "1.0.0-dev1",
+    "version": "1.0.0",
     "author": "yuta25912",
     "description": "ボットのCPU使用率、メモリ、稼働時間、Pingなどの詳細なステータスを取得できるブロックを追加します。",
     "tags": [
