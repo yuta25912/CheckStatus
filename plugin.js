@@ -26,8 +26,7 @@ class Plugin {
             { id: 'status_guild_count', name: '🏠 サーバー数', py: 'len(self.bot.guilds)' },
             { id: 'status_command_count', name: '🛠️ コマンド数', py: 'len(self.bot.tree.get_commands(guild=discord.Object(id=GUILD_ID)))' },
             { id: 'status_shard_count', name: '💎 Shard数', py: 'self.bot.shard_count or 1' },
-            { id: 'status_uptime_current', name: '⏱️ 現稼働時間', py: 'str(datetime.now(timezone.utc) - getattr(self.bot, "start_time", datetime.now(timezone.utc))).split(".")[0]' },
-            { id: 'status_uptime_total', name: '📊 累計稼働時間', py: 'f"{load_data().get(\'total_uptime_seconds\', 0) // 86400}日{(load_data().get(\'total_uptime_seconds\', 0) % 86400) // 3600}時間{(load_data().get(\'total_uptime_seconds\', 0) % 3600) // 60}分"' }
+            { id: 'status_uptime_current', name: '⏱️ 現稼働時間', py: 'str(datetime.now(timezone.utc) - getattr(self.bot, "start_time", datetime.now(timezone.utc))).split(".")[0]' }
         ];
 
         blocksInfo.forEach(info => {
@@ -90,7 +89,6 @@ class Plugin {
             <block type="status_command_count"></block>
             <block type="status_shard_count"></block>
             <block type="status_uptime_current"></block>
-            <block type="status_uptime_total"></block>
         `;
 
         if (this.workspace && this.workspace.updateToolbox) {
