@@ -15,6 +15,8 @@ class Plugin {
     }
 
     registerBlocks() {
+        if (typeof Blockly === 'undefined') return;
+
         const blocksInfo = [
             { id: 'status_cpu_usage', name: '💻 CPU使用率 (%)', py: 'psutil.cpu_percent(interval=0.1)' },
             { id: 'status_mem_used', name: '🧠 RAM使用量 (GiB)', py: 'psutil.virtual_memory().used / (1024 ** 3)' },
@@ -29,7 +31,7 @@ class Plugin {
         ];
 
         blocksInfo.forEach(info => {
-            // ブロック定義
+            // 1. ブロック定義
             Blockly.Blocks[info.id] = {
                 init: function () {
                     this.appendDummyInput().appendField(info.name);
@@ -39,16 +41,27 @@ class Plugin {
                 }
             };
 
-            // Python生成ロジック
-            Blockly.Python[info.id] = function (block) {
-                // 必要なインポートを追加
-                Blockly.Python.definitions_['import_psutil'] = 'import psutil';
-                Blockly.Python.definitions_['import_discord'] = 'import discord';
-                Blockly.Python.definitions_['import_time'] = 'import time';
-                Blockly.Python.definitions_['from_datetime_import_datetime_timezone'] = 'from datetime import datetime, timezone';
-
-                return [info.py, Blockly.Python.ORDER_ATOMIC || 0];
+            // 2. Pythonジェネレータ登録
+            const generator = (block) => {
+                // 自動インポートの確実な登録
+                if (Blockly.Python) {
+                    if (!Blockly.Python.definitions_) Blockly.Python.definitions_ = {};
+                    Blockly.Python.definitions_['import_psutil'] = 'import psutil';
+                    Blockly.Python.definitions_['import_discord'] = 'import discord';
+                    Blockly.Python.definitions_['from_datetime_import_datetime_timezone'] = 'from datetime import datetime, timezone';
+                }
+                const order = (Blockly.Python && (Blockly.Python.ORDER_ATOMIC || Blockly.Python.ORDER_NONE)) || 0;
+                return [info.py, order];
             };
+
+            // EDBB環境に合わせて複数の登録方法を試行
+            if (Blockly.Python) {
+                if (Blockly.Python.forBlock) {
+                    Blockly.Python.forBlock[info.id] = generator;
+                }
+                // フォールバック
+                Blockly.Python[info.id] = generator;
+            }
         });
 
         this.updateToolbox();
