@@ -1,7 +1,7 @@
 class Plugin {
     constructor(workspace) {
         this.workspace = workspace;
-        this.catName = '📊 ステータス';
+        this.catName = 'BOTステータス';
     }
 
     async onload() {
