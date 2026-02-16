@@ -1,24 +1,21 @@
 class Plugin {
     constructor(workspace) {
         this.workspace = workspace;
+        this.catName = '📊 ステータス';
     }
 
     async onload() {
-        try {
-            this.registerBlocks();
-            this.applyCategory();
-            console.log("CheckStatus Plugin loaded!");
-        } catch (e) {
-            console.error("CheckStatus Plugin onload error:", e);
-        }
+        this.registerBlocks();
+        console.log("CheckStatus Plugin loaded!");
     }
 
     async onunload() {
-        console.log("CheckStatus Plugin unloaded!");
+        this.unregisterBlocks();
+        console.log("CheckStatus Plugin unloaded.");
     }
 
     registerBlocks() {
-        const statusBlocks = [
+        const blocksInfo = [
             { id: 'status_cpu_usage', name: '💻 CPU使用率 (%)', py: 'psutil.cpu_percent(interval=0.1)' },
             { id: 'status_mem_used', name: '🧠 RAM使用量 (GiB)', py: 'psutil.virtual_memory().used / (1024 ** 3)' },
             { id: 'status_mem_total', name: '💾 RAM合計 (GiB)', py: 'psutil.virtual_memory().total / (1024 ** 3)' },
@@ -31,7 +28,7 @@ class Plugin {
             { id: 'status_uptime_total', name: '📊 累計稼働時間', py: 'f"{load_data().get(\'total_uptime_seconds\', 0) // 86400}日{(load_data().get(\'total_uptime_seconds\', 0) % 86400) // 3600}時間{(load_data().get(\'total_uptime_seconds\', 0) % 3600) // 60}分"' }
         ];
 
-        statusBlocks.forEach(info => {
+        blocksInfo.forEach(info => {
             // ブロック定義
             Blockly.Blocks[info.id] = {
                 init: function () {
@@ -42,62 +39,62 @@ class Plugin {
                 }
             };
 
-            // Python生成ロジック (古い形式と新しい形式の両方に対応)
-            const generator = function (block) {
+            // Python生成ロジック
+            Blockly.Python[info.id] = function (block) {
+                // 必要なインポートを追加
+                Blockly.Python.definitions_['import_psutil'] = 'import psutil';
+                Blockly.Python.definitions_['import_discord'] = 'import discord';
+                Blockly.Python.definitions_['import_time'] = 'import time';
+                Blockly.Python.definitions_['from_datetime_import_datetime_timezone'] = 'from datetime import datetime, timezone';
+
                 return [info.py, Blockly.Python.ORDER_ATOMIC || 0];
             };
-
-            if (Blockly.Python.forBlock) {
-                Blockly.Python.forBlock[info.id] = generator;
-            } else {
-                Blockly.Python[info.id] = generator;
-            }
         });
+
+        this.updateToolbox();
     }
 
-    applyCategory() {
-        const workspace = this.workspace;
-        let toolbox = workspace.options.languageTree;
+    updateToolbox() {
+        const toolbox = document.getElementById('toolbox');
         if (!toolbox) return;
 
-        const catName = '📊 ステータス';
-        const blockTypes = [
-            'status_cpu_usage', 'status_mem_used', 'status_mem_total', 'status_mem_percent',
-            'status_ping', 'status_guild_count', 'status_command_count', 'status_shard_count',
-            'status_uptime_current', 'status_uptime_total'
-        ];
-
-        // XML
-        if (typeof toolbox === 'string' || toolbox instanceof Element || toolbox instanceof Document) {
-            if (typeof toolbox === 'string') {
-                toolbox = new DOMParser().parseFromString(toolbox, 'text/xml').documentElement;
-            }
-            if (toolbox.querySelector(`category[name="${catName}"]`)) return;
-
-            const newCat = document.createElement('category');
-            newCat.setAttribute('name', catName);
-            newCat.setAttribute('colour', '230');
-            blockTypes.forEach(type => {
-                const block = document.createElement('block');
-                block.setAttribute('type', type);
-                newCat.appendChild(block);
-            });
-            toolbox.appendChild(newCat);
-            workspace.updateToolbox(toolbox);
+        let category = toolbox.querySelector(`category[name="${this.catName}"]`);
+        if (!category) {
+            category = document.createElement('category');
+            category.setAttribute('name', this.catName);
+            category.setAttribute('data-icon', '📊');
+            category.setAttribute('colour', '#4CAF50');
+            toolbox.appendChild(category);
         }
-        // JSON
-        else if (toolbox.contents) {
-            if (toolbox.contents.find(c => c.name === catName)) return;
-            toolbox.contents.push({
-                kind: 'category',
-                name: catName,
-                colour: '230',
-                contents: blockTypes.map(type => ({ kind: 'block', type: type }))
-            });
-            workspace.updateToolbox(toolbox);
+
+        category.innerHTML = `
+            <block type="status_cpu_usage"></block>
+            <block type="status_mem_used"></block>
+            <block type="status_mem_total"></block>
+            <block type="status_mem_percent"></block>
+            <block type="status_ping"></block>
+            <block type="status_guild_count"></block>
+            <block type="status_command_count"></block>
+            <block type="status_shard_count"></block>
+            <block type="status_uptime_current"></block>
+            <block type="status_uptime_total"></block>
+        `;
+
+        if (this.workspace && this.workspace.updateToolbox) {
+            this.workspace.updateToolbox(toolbox);
+        }
+    }
+
+    unregisterBlocks() {
+        const toolbox = document.getElementById('toolbox');
+        if (toolbox) {
+            const category = toolbox.querySelector(`category[name="${this.catName}"]`);
+            if (category) {
+                category.remove();
+                if (this.workspace && this.workspace.updateToolbox) {
+                    this.workspace.updateToolbox(toolbox);
+                }
+            }
         }
     }
 }
-
-// グローバルスコープに公開
-window.Plugin = Plugin;
