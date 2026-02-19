@@ -3,6 +3,8 @@
     "name": "CheckStatus",
     "version": "1.0.0",
     "author": "yuta25912",
+    "minAppVersion": "1.0.0",
+    "uuid": "b5cbde17-1be1-4d86-9e3e-fb998626e9e5",
     "description": "ボットのCPU使用率、メモリ、稼働時間、Pingなどの詳細なステータスを取得できるブロックを追加します。",
     "icon": "📊",
     "tags": [
@@ -12,9 +14,6 @@
     "affectsStyle": false,
     "affectsBlocks": true,
     "repo": "https://github.com/yuta25912/CheckStatus",
-    "license": "MIT",
-    "uuid": "b5cbde17-1be1-4d86-9e3e-fb998626e9e5",
-    "minAppVersion": "1.0.0",
     "externalPackages": [
         "psutil"
     ]
