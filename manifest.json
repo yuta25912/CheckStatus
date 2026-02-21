@@ -1,9 +1,9 @@
 {
     "id": "CheckStatus",
     "name": "CheckStatus",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "yuta25912",
-    "minAppVersion": "1.0.0",
+    "minAppVersion": "1.1.0",
     "uuid": "b5cbde17-1be1-4d86-9e3e-fb998626e9e5",
     "description": "ボットのCPU使用率、メモリ、稼働時間、Pingなどの詳細なステータスを取得できるブロックを追加します。",
     "icon": "📊",
@@ -14,7 +14,7 @@
     "affectsStyle": false,
     "affectsBlocks": true,
     "repo": "https://github.com/yuta25912/CheckStatus",
-    "externalPackages": [
+    "pipInstall": [
         "psutil"
     ]
 }

@@ -22,11 +22,11 @@ class Plugin {
             { id: 'status_mem_used', name: '🧠 RAM使用量 (GiB)', py: 'psutil.virtual_memory().used / (1024 ** 3)' },
             { id: 'status_mem_total', name: '💾 RAM合計 (GiB)', py: 'psutil.virtual_memory().total / (1024 ** 3)' },
             { id: 'status_mem_percent', name: '📊 RAM使用率 (%)', py: 'psutil.virtual_memory().percent' },
-            { id: 'status_ping', name: '📡 Ping (ms)', py: 'self.bot.latency * 1000' },
-            { id: 'status_guild_count', name: '🏠 サーバー数', py: 'len(self.bot.guilds)' },
-            { id: 'status_command_count', name: '🛠️ コマンド数', py: 'len(self.bot.tree.get_commands(guild=discord.Object(id=GUILD_ID)))' },
-            { id: 'status_shard_count', name: '💎 Shard数', py: 'self.bot.shard_count or 1' },
-            { id: 'status_uptime_current', name: '⏱️ 現稼働時間', py: 'str(datetime.now(timezone.utc) - getattr(self.bot, "start_time", datetime.now(timezone.utc))).split(".")[0]' }
+            { id: 'status_ping', name: '📡 Ping (ms)', py: 'bot.latency * 1000' },
+            { id: 'status_guild_count', name: '🏠 サーバー数', py: 'len(bot.guilds)' },
+            { id: 'status_command_count', name: '🛠️ コマンド数', py: 'len(bot.tree.get_commands(guild=discord.Object(id=GUILD_ID)))' },
+            { id: 'status_shard_count', name: '💎 Shard数', py: 'bot.shard_count or 1' },
+            { id: 'status_uptime_current', name: '⏱️ 現稼働時間', py: 'str(datetime.now(timezone.utc) - getattr(bot, "start_time", datetime.now(timezone.utc))).split(".")[0]' }
         ];
 
         blocksInfo.forEach(info => {
